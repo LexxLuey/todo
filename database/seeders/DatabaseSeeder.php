@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        ////Generate a 100 todo entries for user with id = 1
 
         $faker = Faker::create();
 
@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             DB::table('todos')->insert([
                 'title' => $faker->word(),
                 'description' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                'user_id' => 1,
+                'user_id' => 1, //you can insert any user id here
                 'status' => 'pending',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()

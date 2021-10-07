@@ -15,8 +15,9 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
+        //Get authenticated user id
         $userId = Auth::user()->id;
+        //Get authenticated user's list of todo's and paginate it
         $todos = Todo::where(['user_id' => $userId])->paginate(5);
 
         return view('todo.list', ['todos' => $todos]);
@@ -41,12 +42,13 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Get authenticated user id and create new todo instance
         $userId = Auth::user()->id;
         $input = $request->input();
         $input['user_id'] = $userId;
         $todoStatus = Todo::create($input);
 
+        //check if todo was created successfully or not and send a notification
         if ($todoStatus) {
             $request->session()->flash('success', 'Todo successfully added');
         } else {
@@ -64,7 +66,7 @@ class TodoController extends Controller
      */
     public function show( Todo  $todo)
     {
-        //
+        //Get authenticated user and display a single todo
         $userId = Auth::user()->id;
         $todo = Todo::where(['user_id' => $userId, 'id' => $todo->id])->first();
         if (!$todo) {
@@ -81,8 +83,7 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
-        //
-        // dd($todo->id);
+        ////Get authenticated user and display todo to edit
         $userId = Auth::user()->id;
         $todo = Todo::where(['user_id' => $userId, 'id' => $todo->id])->first();
         if ($todo) {
@@ -101,7 +102,7 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        //Get authenticated user and update todo
         $userId = Auth::user()->id;
         $todo = Todo::find($todo->id);
         if (!$todo) {
@@ -125,7 +126,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        //Get authenticated user and delete a specific todo
         $userId = Auth::user()->id;
         $todo = Todo::where(['user_id' => $userId, 'id' => $todo->id])->first();
         $respStatus = $respMsg = '';

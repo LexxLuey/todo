@@ -23,6 +23,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+//all todo routes requires authentication of user via auth middleware
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('/todo', TodoController::class);
 });
