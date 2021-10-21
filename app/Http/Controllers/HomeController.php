@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,5 +27,28 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function verify(Request $request)
+    {
+        // dd($request);
+        $userId = Auth::user()->id;
+        $transaction = new Transaction();
+        $transaction->amount = $request->amount;
+        $transaction->reference = $request->reference;
+        $transaction->user_id = $userId;
+
+        $userDetails = Auth::user();  // To get the logged-in user details
+        $user = User::find($userDetails ->id);  // Find the user using model and hold its reference
+
+        $current_balance = $user->balance;
+        $balance = $current_balance + $request->amount;
+
+        $user->balance = $balance;
+
+        $transaction->save();
+        $user->save();
+
+        return redirect()->route('todo.index');
     }
 }
